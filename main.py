@@ -106,7 +106,6 @@ def delate_names(connetion):
     try:
         cursor.execute("DELETE FROM  students where name='Roberta' ")
 
-        # connection.rollback()
         connection.commit()
     except (Exception, psycopg2.Error) as error:
         print("Error deleting name", error)
@@ -148,28 +147,26 @@ if __name__ == '__main__':
 
         insert_courses(connection)
 
-
         insert_booking(connection, "Marco", "Torlaschi", "SQL")
         insert_booking(connection, "Marco", "Torlaschi", "SPRING")
         insert_booking(connection, "Roberta", "Latini", "SPRING")
 
-        delate_names(connection)
-
         cursor = connection.cursor()
 
-        cursor.execute("SELECT * FROM  students  ")
-        for r in cursor.fetchall():
-            print(r, "\n")
+        cursor.execute("SELECT * FROM students,booking,courses WHERE students.ID=booking.STUDENT_ID AND courses.ID=booking.COURSE_ID")
 
-        cursor.execute("SELECT * FROM  courses  ")
-        for r in cursor.fetchall():
-            print(r, "\n")
+        riga = cursor.fetchall()
 
-        cursor.execute("SELECT * FROM  booking  ")
-        for r in cursor.fetchall():
-            print(r, "\n")
+        print(riga)
+
+
+
+
+
 
         drop_tables(connection)
+
+
 
 
     except (Exception, psycopg2.Error) as error:
